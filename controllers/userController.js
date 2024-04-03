@@ -64,7 +64,8 @@ module.exports = {
    // Add a friend
    async addFriend(req, res) {
     try {
-      const user = await Friend.create(req.body);
+      //pulling params from: router.route('/:userId/friends/:friendId').post(addFriend).delete(removeFriend);
+      const user = await User.findOneAndUpdate({ _id: req.params.userId}, {"$push": {friends: req.params.friendId}});
       res.json(user);
     } catch (err) {
       console.log(err);
@@ -74,11 +75,12 @@ module.exports = {
     // Remove a friend
     async removeFriend(req, res) {
       try {
-        const user = await Friend.findOneAndDelete({_id: req.params.userId});
+        //pulling params from: router.route('/:userId/friends/:friendId').post(addFriend).delete(removeFriend);
+        const user = await User.findOneAndUpdate({ _id: req.params.userId }, { "$pull": {friends: req.params.friendId}});
         if (!user) {
-          res.status(404).json({ message: 'No user with that ID' });
+          res.status(404).json({ message: 'No friend with that ID' });
         }
-        res.json({ message: 'User deleted!' });
+        res.json({ message: 'Friend deleted!' });
       } catch (err) {
         res.status(500).json(err);
       }

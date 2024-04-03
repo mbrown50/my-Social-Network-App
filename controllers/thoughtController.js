@@ -27,7 +27,7 @@ module.exports = {
   async createThought(req, res) {
     try {
       const thought = await Thought.create(req.body);
-      const user = await User.findOneAndUpdate({ username: req.body.username }, {"$push": {friends: thought._id}});
+      const user = await User.findOneAndUpdate({ username: req.body.username }, {"$push": {thoughts: thought._id}});
       res.json(thought);
     } catch (err) {
       console.log(err);
@@ -38,7 +38,7 @@ module.exports = {
   async deleteThought(req, res) {
     try {
       const thought = await Thought.findOneAndDelete({ _id: req.params.thoughtId });
-      const user = await User.findOneAndUpdate({ username: req.body.username }, { "$pull": {friends: req.params.thoughtId}});
+      const user = await User.findOneAndUpdate({ username: req.body.username }, { "$pull": {thoughts: req.params.thoughtId}});
       if (!thought) {
         res.status(404).json({ message: 'No thought with that ID' });
       }
