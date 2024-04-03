@@ -1,7 +1,5 @@
 const { Schema, model } = require('mongoose');
-// const assignmentSchema = require('./Assignment-schema-delete');
-
-//Create a virtual called reactionCount that retrieves the length of the thought's reactions array field on query.
+const reactionSchema = require('./Reaction');
 
 // Schema to create Thought model
 const thoughtSchema = new Schema(
@@ -12,29 +10,30 @@ const thoughtSchema = new Schema(
             maxlength: 280,
             minlength: 1,
         },
-        createdAt: {
-            type: Date,
-            default: Date.now,
-        },
         username: {
             type: String,
             required: true,
         },
-        /*
-        reactions: { // (These are like replies)
-            // Array of nested documents created with the reactionSchema
-        }
-        */
+       reactions: [reactionSchema],
     },
-    /*
     {
         toJSON: {
-            getters: true, //Use a getter method to format the timestamp on query
+            getters: true, 
         },
+        id: false,      
+        timestamps: { createdAt: true, updatedAt: false},
     }
-    */
 );
 
-const Thought = model('thought', thoughtSchema);
+// Create a virtual called reactionCount that retrieves the length of the thought's reactions array field on query.
+thoughtSchema
+  .virtual('reactionCount')
+  // Getter
+  .get(function () {
+    return this.reactions.length;
+  })
+
+// pass collection name to match and not auto pluralize
+const Thought = model('thought', thoughtSchema, 'thought');
 
 module.exports = Thought;
