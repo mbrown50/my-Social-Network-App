@@ -18,10 +18,12 @@ const reactionSchema = new Schema(
         required: true,
     },
   },
+  { _id : false }, 
   {
     toJSON: {
       getters: true,
     },
+    
     timestamps: { createdAt: true, updatedAt: false},
   }
 );
