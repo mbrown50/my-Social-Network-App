@@ -18,6 +18,6 @@ router.route('/:studentId').get(getSingleStudent).delete(deleteStudent);
 router.route('/:studentId/assignments').post(addAssignment);
 
 // /api/students/:studentId/assignments/:assignmentId
-router.route('/:studentId/assignments/:assignmentId').delete(removeAssignment);
+router.route('/:studentId/assignments/:assignmentId').delete(removeAssignment); 
 
 module.exports = router;
